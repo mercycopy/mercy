@@ -38,7 +38,11 @@
         .track-artist { font-size: 0.7rem; color: #444444; text-transform: uppercase; letter-spacing: 1px; }
         
         .progress-container { width: 100%; height: 2px; background: rgba(255, 255, 255, 0.04); overflow: hidden; position: relative; }
-        .progress-bar { height: 100%; background: rgba(255, 255, 255, 0.4); width: 100%; transform: translateX(-100%); animation: playTrack 45s linear infinite; }
+        /* Скорость анимации изменена на 180s (3 минуты) */
+        .progress-bar { height: 100%; background: rgba(255, 255, 255, 0.4); width: 100%; transform: translateX(-100%); animation: playTrack 180s linear infinite; }
+        
+        /* Блок под таймер */
+        .player-meta { display: flex; justify-content: flex-end; font-size: 0.75rem; color: #333333; font-family: monospace; margin-top: 2px; }
         
         @keyframes playTrack {
             0% { transform: translateX(-100%); }
@@ -71,6 +75,9 @@
                         <span class="track-artist">plattmade</span>
                     </div>
                     <div class="progress-container"><div class="progress-bar"></div></div>
+                    <div class="player-meta">
+                        <span id="player-time">0:00 / 3:00</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -108,6 +115,22 @@
         for(let i=0; i<45; i++) particles.push(new Particle());
         function animate() { ctx.clearRect(0,0,canvas.width,canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
         animate();
+
+        // Скрипт для живого таймера
+        const timeDisplay = document.getElementById('player-time');
+        const duration = 180; // Время в секундах (3 минуты)
+        let currentSeconds = 0;
+
+        setInterval(() => {
+            currentSeconds++;
+            if (currentSeconds > duration) currentSeconds = 0;
+            
+            let mins = Math.floor(currentSeconds / 60);
+            let secs = currentSeconds % 60;
+            let formattedSecs = secs < 10 ? '0' + secs : secs;
+            
+            timeDisplay.textContent = `${mins}:${formattedSecs} / 3:00`;
+        }, 1000);
     </script>
 </body>
 </html>
